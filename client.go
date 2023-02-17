@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
 	///"os"
 	"time"
 )
@@ -51,14 +52,14 @@ func (asaas *AsaasClient) Request(mode, method, action string, body []byte, out 
 	bodyResponse, err := ioutil.ReadAll(res.Body)
 	if res.StatusCode > 201 {
 		var errAPI Error
-		err = json.Unmarshal(bodyResponse, &errAPI)
+		err = myUnmarshal(bodyResponse, &errAPI)
 		if err != nil {
 			return err, nil
 		}
 		errAPI.Body = string(bodyResponse)
 		return nil, &errAPI
 	}
-	err = json.Unmarshal(bodyResponse, out)
+	err = myUnmarshal(bodyResponse, out)
 	if err != nil {
 		return err, nil
 	}
@@ -69,10 +70,17 @@ func (asaas *AsaasClient) devProd(mode string) string {
 	/**if os.Getenv("ENV") == "develop" {
 		return "https://private-anon-ba248353a0-asaasv3.apiary-mock.com/api/v3"
 	}*/
-    
-    if mode == "sandbox" {
-        return "https://sandbox.asaas.com/api/v3"
-    }
-    
+
+	if mode == "sandbox" {
+		return "https://sandbox.asaas.com/api/v3"
+	}
+
 	return "https://www.asaas.com/api/v3"
+}
+
+func myUnmarshal(input []byte, target interface{}) error {
+	if len(input) == 0 {
+		return nil
+	}
+	return json.Unmarshal(input, target)
 }

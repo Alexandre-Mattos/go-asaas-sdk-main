@@ -96,6 +96,15 @@ type PaymentDelete struct {
 	ID      string `json:"id"`
 }
 
+type PaymentResponse struct {
+	Object     string    `json:"object"`
+	HasMore    bool      `json:"hasMore"`
+	TotalCount int64     `json:"totalCount"`
+	Limit      int64     `json:"limit"`
+	Offset     int64     `json:"offset"`
+	Data       []Payment `json:"data"`
+}
+
 func (asaas *AsaasClient) PaymentBoleto(mode string, req PaymentBoleto) (*Payment, *Error, error) {
 	payment := Payment{
 		Customer:          req.Customer,
@@ -166,10 +175,10 @@ func (asaas *AsaasClient) PaymentCard(mode string, req PaymentCard) (*Payment, *
 	return response, nil, nil
 }
 
-func (asaas *AsaasClient) GetAllPayments(mode string, filters map[string]int) ([]*Payment, *Error, error) {
+func (asaas *AsaasClient) GetAllPayments(mode string, filters map[string]int) (*PaymentResponse, *Error, error) {
 	data, _ := json.Marshal(filters)
 
-	var response []*Payment
+	var response *PaymentResponse
 	err, _ := asaas.Request(mode, "GET", fmt.Sprintf("payments/?"), data, &response)
 	if err != nil {
 		return nil, nil, err

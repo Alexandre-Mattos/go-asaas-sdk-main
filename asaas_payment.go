@@ -183,6 +183,24 @@ func (asaas *AsaasClient) GetAllPayments(mode string, filters map[string]int) (*
 	if err != nil {
 		return nil, nil, err
 	}
+
+	var responseLastest *PaymentResponse
+	if response.HasMore {
+		for response.HasMore {
+			filters["offset"] = int(response.Offset)
+
+			data, _ := json.Marshal(filters)
+
+			err, _ := asaas.Request(mode, "GET", fmt.Sprintf("payments/?"), data, &responseLastest)
+			if err != nil {
+				return nil, nil, err
+			}
+			response.Data = append(response.Data, responseLastest.Data...)
+			response.HasMore = responseLastest.HasMore
+			response.Offset = responseLastest.Offset
+		}
+	}
+
 	return response, nil, err
 
 }

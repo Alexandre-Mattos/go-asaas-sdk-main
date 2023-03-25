@@ -67,12 +67,15 @@ type PaymentCreditCardHolderInfo struct {
 }
 
 type PaymentBoleto struct {
-	Customer          string  `json:"customer"`
-	DueDate           string  `json:"dueDate"`
-	Value             float32 `json:"value"`
-	ExternalReference string  `json:"externalReference"`
-	Description       string  `json:"description"`
-	Split             []Split `json:"split"`
+	Customer          string          `json:"customer"`
+	DueDate           string          `json:"dueDate"`
+	Value             float32         `json:"value"`
+	ExternalReference string          `json:"externalReference"`
+	Description       string          `json:"description"`
+	Split             []Split         `json:"split"`
+	Fine              PaymentFine     `json:"fine"`
+	Interest          PaymentInterest `json:"interest"`
+	Discount          PaymentDiscount `json:"discount"`
 }
 
 type PaymentCard struct {
@@ -121,6 +124,9 @@ func (asaas *AsaasClient) PaymentBoleto(mode string, req PaymentBoleto) (*Paymen
 		Description:       req.Description,
 		ExternalReference: req.ExternalReference,
 		PostalService:     false,
+		Fine:              req.Fine,
+		Interest:          req.Interest,
+		Discount:          req.Discount,
 	}
 	data, _ := json.Marshal(payment)
 	var response *Payment

@@ -72,6 +72,7 @@ type PaymentBoleto struct {
 	Value             float32 `json:"value"`
 	ExternalReference string  `json:"externalReference"`
 	Description       string  `json:"description"`
+	Split             []Split `json:"split"`
 }
 
 type PaymentCard struct {
@@ -103,6 +104,12 @@ type PaymentResponse struct {
 	Limit      int64     `json:"limit"`
 	Offset     int64     `json:"offset"`
 	Data       []Payment `json:"data"`
+}
+
+type Split struct {
+	WalletId        string  `json:"walletId"`
+	FixedValue      float32 `json:"fixedValue"`
+	PercentualValue float32 `json:"percentualValue"`
 }
 
 func (asaas *AsaasClient) PaymentBoleto(mode string, req PaymentBoleto) (*Payment, *Error, error) {

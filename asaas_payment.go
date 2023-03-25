@@ -141,6 +141,32 @@ func (asaas *AsaasClient) PaymentBoleto(mode string, req PaymentBoleto) (*Paymen
 	return response, nil, nil
 }
 
+func (asaas *AsaasClient) UpdatePayment(mode, id string, req PaymentBoleto) (*Payment, *Error, error) {
+	payment := Payment{
+		Customer:          req.Customer,
+		BillingType:       "BOLETO",
+		DueDate:           req.DueDate,
+		Value:             req.Value,
+		Description:       req.Description,
+		ExternalReference: req.ExternalReference,
+		PostalService:     false,
+		Fine:              req.Fine,
+		Interest:          req.Interest,
+		Discount:          req.Discount,
+	}
+	data, _ := json.Marshal(payment)
+	var response *Payment
+	err, errAPI := asaas.Request(mode, "POST", fmt.Sprintf("payments/%s", id), data, &response)
+	if err != nil {
+		return nil, nil, err
+	}
+	if errAPI != nil {
+		return nil, errAPI, nil
+	}
+
+	return response, nil, nil
+}
+
 func (asaas *AsaasClient) PaymentCard(mode string, req PaymentCard) (*Payment, *Error, error) {
 	payment := Payment{
 		Customer:    req.Customer,

@@ -33,6 +33,7 @@ type Payment struct {
 	Deleted              bool                        `json:"deleted"`
 	PostalService        bool                        `json:"postalService"`
 	Anticipated          bool                        `json:"anticipated"`
+	Split                []Split                     `json:"split"`
 }
 
 type PaymentDiscount struct {
@@ -127,6 +128,7 @@ func (asaas *AsaasClient) PaymentBoleto(mode string, req PaymentBoleto) (*Paymen
 		Fine:              req.Fine,
 		Interest:          req.Interest,
 		Discount:          req.Discount,
+		Split:             req.Split,
 	}
 	data, _ := json.Marshal(payment)
 	var response *Payment

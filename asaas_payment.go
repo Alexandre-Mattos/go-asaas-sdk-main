@@ -143,7 +143,7 @@ func (asaas *AsaasClient) PaymentBoleto(mode string, req PaymentBoleto) (*Paymen
 	return response, nil, nil
 }
 
-func (asaas *AsaasClient) UpdatePayment(mode, id string, req PaymentBoleto) (*Payment, *Error, error) {
+func (asaas *AsaasClient) UpdatePaymentBoleto(mode, id string, req PaymentBoleto) (*Payment, *Error, error) {
 	payment := Payment{
 		Customer:          req.Customer,
 		BillingType:       "BOLETO",
@@ -155,6 +155,7 @@ func (asaas *AsaasClient) UpdatePayment(mode, id string, req PaymentBoleto) (*Pa
 		Fine:              req.Fine,
 		Interest:          req.Interest,
 		Discount:          req.Discount,
+		Split:             req.Split,
 	}
 	data, _ := json.Marshal(payment)
 	var response *Payment

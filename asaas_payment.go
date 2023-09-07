@@ -218,10 +218,8 @@ func (asaas *AsaasClient) PaymentCard(mode string, req PaymentCard) (*Payment, *
 }
 
 func (asaas *AsaasClient) GetAllPayments(mode string, filters map[string]int) (*PaymentResponse, *Error, error) {
-	data, _ := json.Marshal(filters)
-
 	var response *PaymentResponse
-	err, _ := asaas.Request(mode, "GET", fmt.Sprintf("payments/?"), data, &response)
+	err, _ := asaas.Request(mode, "GET", fmt.Sprintf("payments?limit=%d&offset=%d", filters["limit"], filters["offset"]), nil, &response)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -229,14 +227,13 @@ func (asaas *AsaasClient) GetAllPayments(mode string, filters map[string]int) (*
 	var responseLastest *PaymentResponse
 	if response.HasMore {
 		for response.HasMore {
-			filters["offset"] = int(response.Offset)
+			filters["offset"] += 1
 
-			data, _ := json.Marshal(filters)
-
-			err, _ := asaas.Request(mode, "GET", fmt.Sprintf("payments/?"), data, &responseLastest)
+			err, _ := asaas.Request(mode, "GET", fmt.Sprintf("payments?limit=%d&offset=%d", filters["limit"], filters["offset"]), nil, &responseLastest)
 			if err != nil {
 				return nil, nil, err
 			}
+
 			response.Data = append(response.Data, responseLastest.Data...)
 			response.HasMore = responseLastest.HasMore
 			response.Offset = responseLastest.Offset
@@ -244,7 +241,6 @@ func (asaas *AsaasClient) GetAllPayments(mode string, filters map[string]int) (*
 	}
 
 	return response, nil, err
-
 }
 
 func (asaas *AsaasClient) GetPayment(mode, id string) (*Payment, *Error, error) {

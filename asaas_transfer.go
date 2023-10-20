@@ -19,7 +19,7 @@ type TransferResponse struct {
 }
 
 type Transfer struct {
-	Value         float64     `json:"value"`
+	Value         float32     `json:"value"`
 	BankAccount   BankAccount `json:"bankAccount"`
 	OperationType string      `json:"operationType"`
 }
@@ -28,11 +28,11 @@ type BankAccount struct {
 	Bank            Bank   `json:"bank"`
 	AccountName     string `json:"accountName"`
 	OwnerName       string `json:"ownerName"`
-	cpfCnpj         string `json:"cpfCnpj"`
-	agency          string `json:"agency"`
-	account         string `json:"account"`
-	accountDigit    string `json:"accountDigit"`
-	bankAccountType string `json:"bankAccountType"`
+	CpfCnpj         string `json:"cpfCnpj"`
+	Agency          string `json:"agency"`
+	Account         string `json:"account"`
+	AccountDigit    string `json:"accountDigit"`
+	BankAccountType string `json:"bankAccountType"`
 }
 
 type Bank struct {

@@ -46,7 +46,7 @@ type Pix struct {
 	Value             float32 `json:"value"`
 }
 
-func (asaas *AsaasClient) transfer(mode string, req Transfer) (*TransferResponse, *Error, error) {
+func (asaas *AsaasClient) Transfer(mode string, req Transfer) (*TransferResponse, *Error, error) {
 	transfer := Transfer{
 		OperationType: "TED",
 		Value:         req.Value,
@@ -65,7 +65,7 @@ func (asaas *AsaasClient) transfer(mode string, req Transfer) (*TransferResponse
 	return response, nil, nil
 }
 
-func (asaas *AsaasClient) transferPix(mode string, req Pix) (*TransferResponse, *Error, error) {
+func (asaas *AsaasClient) TransferPix(mode string, req Pix) (*TransferResponse, *Error, error) {
 	pix := Pix{
 		OperationType:     "PIX",
 		PixAddressKey:     req.PixAddressKey,
